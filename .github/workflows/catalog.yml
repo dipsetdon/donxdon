@@ -1,0 +1,75 @@
+name: Manage product catalog
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: "Add or update a listing, remove it, or check the catalog without changes"
+        required: true
+        default: check
+        type: choice
+        options: [check, add_or_update, remove]
+      product_id:
+        description: "Stable ID, e.g. black-logo-tee; required to add, update, or remove"
+        type: string
+      name:
+        description: "Product name; required to add or update"
+        type: string
+      category:
+        description: "Product category"
+        type: choice
+        default: Other
+        options: [Tees, Hoodies, Sets, Denim, Outerwear, Accessories, Other]
+      price:
+        description: "USD price without the dollar sign, e.g. 45.00; required to add or update"
+        type: string
+      description:
+        description: "Public product description"
+        type: string
+      photo:
+        description: "Optional filename already uploaded into the media folder"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: donxdon-catalog
+  cancel-in-progress: false
+
+jobs:
+  update:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Validate inputs and build
+        run: python3 scripts/catalog.py update --event "$GITHUB_EVENT_PATH"
+      - name: Save catalog changes
+        id: save
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- catalog/products.json; then
+            echo "Catalog validated. No changes to save."
+            exit 0
+          fi
+          previous=$(git rev-parse HEAD:catalog/products.json)
+          gh api --method PUT "repos/${GITHUB_REPOSITORY}/contents/catalog/products.json" \
+            --field message="Update storefront catalog" \
+            --field branch=main --field sha="$previous" \
+            --field content="$(base64 -w0 catalog/products.json)" --jq '.commit.sha'
+          echo "updated=yes" >> "$GITHUB_OUTPUT"
+      - name: Request hosting rebuild
+        if: steps.save.outputs.updated == 'yes'
+        env:
+          DEPLOY_HOOK: ${{ secrets.CATALOG_DEPLOY_HOOK }}
+        run: |
+          if [ -n "$DEPLOY_HOOK" ]; then
+            curl --fail --silent --output /dev/null --max-time 30 \
+              --proto '=https' --request POST "$DEPLOY_HOOK"
+          else
+            echo "No deploy hook configured. Redeploy if your hosting platform does not auto-build."
+          fi

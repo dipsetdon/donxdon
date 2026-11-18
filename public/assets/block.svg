@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="560" viewBox="0 0 600 560">
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#988778" stroke-opacity=".24"/></pattern>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><path d="M0 0v8" stroke="#b85236" stroke-opacity=".37" stroke-width="2"/></pattern>
+    <g id="window"><path d="M0 60V16a13 13 0 0 1 26 0v44zM-3 60h32M13 4v55M1 27h24M1 44h24"/></g>
+    <g id="house"><path d="M0 280V18h8V6h116v12h8v262M0 30h132M4 43h124M4 114h124M4 191h124M4 268h124M83 280v-56a15 15 0 0 1 30 0v56M87 279v-54a11 11 0 0 1 22 0v54M79 280h38l5 7H74zM73 287h50l5 7H68z"/><use href="#window" x="23" y="51"/><use href="#window" x="84" y="51"/><use href="#window" x="23" y="123"/><use href="#window" x="84" y="123"/><use href="#window" x="23" y="202"/></g>
+  </defs>
+  <path fill="#211c19" d="M0 0h600v560H0z"/>
+  <path fill="url(#grid)" d="M0 0h600v560H0z"/>
+  <circle cx="362" cy="211" r="145" fill="#6d3124" fill-opacity=".26" stroke="#bb5d42" stroke-width="1"/>
+  <circle cx="362" cy="211" r="122" fill="url(#hatch)" stroke="#bb5d42" stroke-opacity=".7"/>
+  <path d="M362 50v322M201 211h322M45 416h509M52 441h493M72 470h456M110 438l-30 32m77-32-24 32m87-32-14 32m174-32 14 32m48-32 24 32m24-32 30 32" fill="none" stroke="#b96248" stroke-opacity=".53"/>
+  <path d="M51 92V61h31m435 0h31v31M51 474v31h31m435 0h31v-31" fill="none" stroke="#d47757" stroke-width="2"/>
+  <path d="M96 413V170h8v-12h116v12h8v-35h8v-12h116v12h8v47h8v-12h116v12h8v231z" fill="#2f2722"/>
+  <g fill="none" stroke="#e48b6c" stroke-width="1.7" stroke-linejoin="round">
+    <use href="#house" x="96" y="132"/><use href="#house" x="228" y="97"/><use href="#house" x="360" y="148"/>
+    <path d="M61 416h470M85 435h432M96 412h132m0-35v39m132-39v39m0 12h132"/>
+  </g>
+  <g fill="#e48b6c" font-family="monospace" font-size="11" letter-spacing="2"><text x="66" y="113">ROW / 001</text><text x="418" y="491">WEST ELEV.</text></g>
+</svg>
